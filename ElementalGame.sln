@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElementalGame", "ElementalGame\ElementalGame.csproj", "{3D324F09-4C0B-4A54-BEF4-3D30EB6A0365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\GameLogic.csproj", "{32D072CC-C3C2-4A9D-8229-D70DE0F0F7B9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{016D0DF5-BE58-472D-AE93-0DA9214C28C2}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{3D324F09-4C0B-4A54-BEF4-3D30EB6A0365}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D324F09-4C0B-4A54-BEF4-3D30EB6A0365}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D324F09-4C0B-4A54-BEF4-3D30EB6A0365}.Release|Any CPU.Build.0 = Release|Any CPU
-		{32D072CC-C3C2-4A9D-8229-D70DE0F0F7B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{32D072CC-C3C2-4A9D-8229-D70DE0F0F7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{32D072CC-C3C2-4A9D-8229-D70DE0F0F7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{32D072CC-C3C2-4A9D-8229-D70DE0F0F7B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{016D0DF5-BE58-472D-AE93-0DA9214C28C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{016D0DF5-BE58-472D-AE93-0DA9214C28C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{016D0DF5-BE58-472D-AE93-0DA9214C28C2}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -3,24 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Drawing;
 using System.Data;
 
 namespace Engine
 {
     public enum MarbleState { Frozen, Free }
     public enum MarbleType { Salt, Earth, Fire, Water, Air, Vitae, Mors, Quicksilver, Lead, Tin, Iron, Copper, Silver, Gold }
-
+    
     public class Marble
     {
         public MarbleState State { get; set; }
         public MarbleType Element { get; set; }
         public List<MarbleType> Matchers { get; set; }
+        public PointF Location { get; set; }
 
         public Marble(MarbleState state, MarbleType element)
         {
             State = state;
             Element = element;
+            Matchers = new List<MarbleType>();
             GetMatchers();
         }
 
@@ -85,9 +87,63 @@ namespace Engine
             }
         }
 
-        public void Calcify()
+        public bool Placed()
         {
-            Element = MarbleType.Salt;
+            if (Location.X == 0 && Location.Y == 0)
+                return false;
+            else
+                return true;
+        }
+
+        public PointF GetTopXY()
+        {
+            return new PointF(this.Location.X, this.Location.Y - 1);
+        }
+
+        public PointF GetBottomXY()
+        {
+            return new PointF(this.Location.X, this.Location.Y + 1);
+        }
+
+        public PointF GetTopRightXY()
+        {
+            if (Location.X % 2 == 0)
+                return new PointF(this.Location.X+1, this.Location.Y - 1);
+            else
+                return new PointF(this.Location.X+1, this.Location.Y);
+        }
+
+        public PointF GetTopLeftXY()
+        {
+            if (Location.X % 2 == 0)
+                return new PointF(this.Location.X-1, this.Location.Y - 1);
+            else
+                return new PointF(this.Location.X-1, this.Location.Y );
+        }
+
+        public PointF GetBottomRightXY()
+        {
+            if (Location.X % 2 == 0)
+                return new PointF(this.Location.X+1, this.Location.Y );
+            else
+                return new PointF(this.Location.X+1, this.Location.Y + 1);
+        }
+
+        public PointF GetBottomLeftXY()
+        {
+            if (Location.X % 2 == 0)
+                return new PointF(this.Location.X - 1, this.Location.Y);
+            else
+                return new PointF(this.Location.X -1, this.Location.Y + 1);
+        }
+
+        public bool IsMetal()
+        {
+            //Lead, Tin, Iron, Copper, Silver, Gold
+            if (Element == MarbleType.Lead || Element == MarbleType.Tin || Element == MarbleType.Iron || Element == MarbleType.Copper || Element == MarbleType.Silver || Element == MarbleType.Gold)
+                return true;
+            else
+                return false;
         }
 
         public bool IsMatch(Marble m)
@@ -97,6 +153,15 @@ namespace Engine
             else return false;
         }
 
+        // not needed for this game
+        public void Calcify()
+        {
+            Element = MarbleType.Salt;
+        }
+
+        
+
+        // not needed for this game
         public void Ascend()
         {
             switch (Element)

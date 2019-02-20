@@ -88,11 +88,12 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(19, 175);
+            this.label6.MaximumSize = new System.Drawing.Size(500, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(414, 13);
+            this.label6.Size = new System.Drawing.Size(499, 26);
             this.label6.TabIndex = 5;
-            this.label6.Text = "An element must have at least 3 continuous spaces around it to be matched/removed" +
-    ".";
+            this.label6.Text = "An element must have at least 3 continuous empty spaces around it to be matched/r" +
+    "emoved. The edges of the board count as empty spaces";
             // 
             // HelpScreen
             // 

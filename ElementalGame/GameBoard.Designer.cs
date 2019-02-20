@@ -1,6 +1,6 @@
 ﻿namespace ElementalGame
 {
-    partial class Form1
+    partial class GameBoard
     {
         /// <summary>
         /// Required designer variable.
@@ -30,10 +30,8 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.helpMeImANoobToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -43,7 +41,7 @@
             this.helpMeImANoobToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(658, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(896, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -54,20 +52,6 @@
             this.newGameToolStripMenuItem.Text = "New Game...";
             this.newGameToolStripMenuItem.Click += new System.EventHandler(this.newGameToolStripMenuItem_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(418, 27);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(240, 428);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView1_DataError);
-            // 
             // helpMeImANoobToolStripMenuItem
             // 
             this.helpMeImANoobToolStripMenuItem.Name = "helpMeImANoobToolStripMenuItem";
@@ -75,23 +59,21 @@
             this.helpMeImANoobToolStripMenuItem.Text = "Help Me I\'m a Noob";
             this.helpMeImANoobToolStripMenuItem.Click += new System.EventHandler(this.helpMeImANoobToolStripMenuItem_Click);
             // 
-            // Form1
+            // GameBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(658, 467);
-            this.Controls.Add(this.dataGridView1);
+            this.BackColor = System.Drawing.Color.DimGray;
+            this.ClientSize = new System.Drawing.Size(896, 530);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "GameBoard";
             this.Text = "Elemental Matching Game";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.picGrid_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picGrid_MouseClick);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picGrid_MouseMove);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,7 +83,6 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ToolStripMenuItem helpMeImANoobToolStripMenuItem;
     }
 }

@@ -44,79 +44,83 @@ namespace ElementalGame
         private void DefineBoard()
         {
             // top point
-            Hexagons.Add(new PointF(0, 5));
+            Hexagons.Add(new PointF(5, 0));
 
             // top left diagonal
-            Hexagons.Add(new PointF(1, 4));
-            Hexagons.Add(new PointF(1, 3));
+            Hexagons.Add(new PointF(4, 1));
+            Hexagons.Add(new PointF(3, 1));
             Hexagons.Add(new PointF(2, 2));
-            Hexagons.Add(new PointF(2, 1));
+            Hexagons.Add(new PointF(1, 2));
 
             // top right diagonal
-            Hexagons.Add(new PointF(1, 6));
-            Hexagons.Add(new PointF(1, 7));
-            Hexagons.Add(new PointF(2, 8));
-            Hexagons.Add(new PointF(2, 9));
+            Hexagons.Add(new PointF(6, 1));
+            Hexagons.Add(new PointF(7, 1));
+            Hexagons.Add(new PointF(8, 2));
+            Hexagons.Add(new PointF(9, 2));
 
             // left side vertical
-            Hexagons.Add(new PointF(3, 0));
-            Hexagons.Add(new PointF(4, 0));
-            Hexagons.Add(new PointF(5, 0));
-            Hexagons.Add(new PointF(6, 0));
-            Hexagons.Add(new PointF(7, 0));
-            Hexagons.Add(new PointF(8, 0));
+            Hexagons.Add(new PointF(0, 3));
+            Hexagons.Add(new PointF(0, 4));
+            Hexagons.Add(new PointF(0, 5));
+            Hexagons.Add(new PointF(0, 6));
+            Hexagons.Add(new PointF(0, 7));
+            Hexagons.Add(new PointF(0, 8));
 
             // right side vertical
-            Hexagons.Add(new PointF(3, 10));
-            Hexagons.Add(new PointF(4, 10));
-            Hexagons.Add(new PointF(5, 10));
-            Hexagons.Add(new PointF(6, 10));
-            Hexagons.Add(new PointF(7, 10));
-            Hexagons.Add(new PointF(8, 10));
+            Hexagons.Add(new PointF(10, 3));
+            Hexagons.Add(new PointF(10, 4));
+            Hexagons.Add(new PointF(10, 5));
+            Hexagons.Add(new PointF(10, 6));
+            Hexagons.Add(new PointF(10, 7));
+            Hexagons.Add(new PointF(10, 8));
 
             // bottom left diagonal
-            Hexagons.Add(new PointF(8, 1));
-            Hexagons.Add(new PointF(9, 2));
-            Hexagons.Add(new PointF(9, 3));
-            Hexagons.Add(new PointF(10, 4));
+            Hexagons.Add(new PointF(1, 8));
+            Hexagons.Add(new PointF(2, 9));
+            Hexagons.Add(new PointF(3, 9));
+            Hexagons.Add(new PointF(4, 10));
 
             // bottom right diagonal
-            Hexagons.Add(new PointF(9, 8));
             Hexagons.Add(new PointF(8, 9));
-            Hexagons.Add(new PointF(9, 7));
-            Hexagons.Add(new PointF(10, 6));
+            Hexagons.Add(new PointF(9, 8));
+            Hexagons.Add(new PointF(7, 9));
+            Hexagons.Add(new PointF(6, 10));
 
             // bottom point 
-            Hexagons.Add(new PointF(10, 5));
+            Hexagons.Add(new PointF(5, 10));
 
             // inner hexes
+            // middle
             for (int i = 1; i < 10; i++)
             {
-                Hexagons.Add(new PointF(3, i));
-                Hexagons.Add(new PointF(4, i));
-                Hexagons.Add(new PointF(5, i));
-                Hexagons.Add(new PointF(6, i));
-                Hexagons.Add(new PointF(7, i));
+                Hexagons.Add(new PointF(i,3));
+                Hexagons.Add(new PointF(i, 4));
+                Hexagons.Add(new PointF(i, 5));
+                Hexagons.Add(new PointF(i, 6));
+                Hexagons.Add(new PointF(i, 7));
             }
 
+            // lower bit
             for (int i = 2; i < 9; i++)
             {
-                Hexagons.Add(new PointF(8, i));
-              
+                Hexagons.Add(new PointF(i,8));
+
             }
+            // last 3 in the lower part
+            Hexagons.Add(new PointF(4,9));
+            Hexagons.Add(new PointF(5,9));
+            Hexagons.Add(new PointF(6,9));
 
-            Hexagons.Add(new PointF(9, 4));
-            Hexagons.Add(new PointF(9, 5));
-            Hexagons.Add(new PointF(9, 6));
-
-            Hexagons.Add(new PointF(1,5));
+            // right below top point
+            Hexagons.Add(new PointF(5,1));
 
             for (int i = 2; i < 8; i++)
             {
-                Hexagons.Add(new PointF(2, i));
+                Hexagons.Add(new PointF(i, 2));
 
             }
-
+            
+           
         }
 
         private void CreateMarbles()
@@ -252,7 +256,7 @@ namespace ElementalGame
             Marble Mors4 = new Marble(MarbleState.Frozen, MarbleType.Mors);
             Marbles.Add(Mors4);
 
-
+            dataGridView1.DataSource = Marbles;
         }
 
         private void PlaceMarbles()
@@ -263,10 +267,9 @@ namespace ElementalGame
             // for each hex in the play area, try to add a marble, if the random number is outside the bounds of the list, nothing is added (blank space)
             foreach (PointF p in Hexagons)
             {
-                if (p.X == 8 && p.Y == 10)
-                {
-                    int i = 0;
-                }
+                // skip middle space, reserved for gold
+                if (p.X == 5 && p.Y == 5)
+                    continue; 
 
                 while (true)
                 {
@@ -274,19 +277,39 @@ namespace ElementalGame
 
                     if (randInt >= Marbles.Count)
                     {
-                        break;
+                        break; // blank space
                     }
                     if (!Marbles[randInt].Placed())
                     {
-                        Marbles[randInt].Location = new PointF(p.Y, p.X);
+                        Marbles[randInt].Location = new PointF(p.X, p.Y);
                         break;
                     }
                 }
                 
                 
             }
-           
-              
+
+            // if not all the marbles are placed in the initial loop, assign the leftovers to random spaces on the board
+            var unplaced = Marbles.Where(x => x.Placed() == false);
+            
+            foreach (Marble m in unplaced)
+            {
+                while (true)
+                {
+                    randInt = rand.Next(Hexagons.Count - 1);
+                    if (GetMarble(Hexagons[randInt]) == null)
+                    {
+                        m.Location = Hexagons[randInt];
+                        break;
+                    }
+                }
+            }
+            
+            // check if there are 2 marbles on any hex
+            foreach (PointF p in Hexagons)
+            {
+
+            }
 
         }
 
@@ -592,7 +615,7 @@ namespace ElementalGame
         private Brush GetBrush(PointF p)
         {
             Brush result = null;
-            Marble m = GetMarble((int)p.X, (int)p.Y);
+            Marble m = GetMarble((int)p.Y, (int)p.X);
             if (m == null)
                 return Brushes.Beige;
             
@@ -648,19 +671,35 @@ namespace ElementalGame
         // Redraw the grid.
         private void picGrid_Paint(object sender, PaintEventArgs e)
         {
+            string elementLabel;
+            PointF labelLocation;
+            Marble m;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            
-
             // Draw the selected hexagons.
-           
             foreach (PointF point in Hexagons)
             {
                 Brush b = GetBrush(point);
-                //e.Graphics.FillPolygon(Brushes.Beige,                    HexToPoints(HexHeight, point.X, point.Y));
-                e.Graphics.FillPolygon(b, HexToPoints(HexHeight, point.X, point.Y));
+                e.Graphics.FillPolygon(b, HexToPoints(HexHeight, point.Y, point.X));
+
             }
-            
+            foreach (PointF point in Hexagons)
+            {
+                if (Marbles.Count > 0)
+                {
+                    m = GetMarble(point);
+                    if (m != null)
+                    {
+                        elementLabel = m.Element.ToString().Substring(0, 1);
+                        int row, col;
+                        labelLocation = HexToPoints(HexHeight, point.Y, point.X)[0];
+                        labelLocation.X += 15;
+                        labelLocation.Y -= 8;
+                        e.Graphics.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, labelLocation);
+                    }
+                }
+            }
+
 
             if (Selected.X >0 || Selected.Y > 0)
                 e.Graphics.FillPolygon(Brushes.White,
@@ -830,16 +869,23 @@ namespace ElementalGame
             
 
             Marble m = GetMarble(row, col);
+            
             if (m != null && m.State != MarbleState.Frozen)
             {
                 // a free marble is clicked on
-
-
-                if (Selected.X == m.Location.X && Selected.Y == m.Location.Y) // clicked on the previously selected marble, deselect it
+                // if it is gold, immediately remove it from the game
+                if (m.Element == MarbleType.Gold)
                 {
                     Selected.X = 0;
                     Selected.Y = 0;
-                } else if ((Selected.X !=0 && Selected.Y != 0) && GetMarble(Selected).Matchers.Contains(m.Element)) // clicked on a matching marble, remove them both from the game, clear selection
+                    Marbles.Remove(m);
+                }
+                else if (Selected.X == m.Location.X && Selected.Y == m.Location.Y) // clicked on the previously selected marble, deselect it
+                {
+                    Selected.X = 0;
+                    Selected.Y = 0;
+                }
+                else if ((Selected.X !=0 && Selected.Y != 0) && GetMarble(Selected).IsMatch(m)) // clicked on a matching marble, remove them both from the game, clear selection
                 {
                     if (m.IsMetal() || GetMarble(Selected).IsMetal())
                     {
@@ -921,6 +967,17 @@ namespace ElementalGame
             PlaceMarbles();
             UnfreezeMarbles();
             this.Refresh();
+        }
+
+        private void dataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
+
+        private void helpMeImANoobToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HelpScreen help = new HelpScreen();
+            help.ShowDialog();
         }
     }
 }

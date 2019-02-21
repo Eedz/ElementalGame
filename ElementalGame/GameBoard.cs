@@ -12,85 +12,63 @@ using Engine;
 
 namespace ElementalGame
 {
-    // TODO use better graphics for marbles
+    // TODO use better graphics for marbles, use TextureBrush for marbles
     // TODO when selecting, try to highligh the border of the hex instead of turning it white
     // TODO add graphics to help screen
     // TODO add new PlaceMarbles procedure that clusters more to the middle, or doesn't leave so many blanks in the middle
-    // TODO debug some marbles not matching on the left side of the board
+
+    
     // TODO improve redrawing procedure, maybe not everything has to be redrawn every click?
     // TODO add streak counter, total wins counter, etc. and a way to reset them
     public partial class GameBoard : Form
     {
-        List<PointF> Hexagons; // the hexes involved in the game board
+        List<PointF> Hexagons;              // the hexes involved in the game board
+        List<Marble> Marbles { get; set; }  // all the marbles still in play, these are placed on the Hexagons
+
         int boardWidth = 11;
         int boardHeight = 11;
         int FormHeight = 506;
         int FormWidth = 432;
         int HexHeight =40;
         PointF Selected;
-        MarbleType Ascendency;
+        MarbleType Ascendency; // the current metal-level
 
         bool Loaded;
 
-        List<Marble> Marbles { get; set; }
-
-        List<PointF> AirRemaining;
+        // list of co-ords that corresponds to spiralling outwards from the middle, counterclockwise
+        List<PointF> CCSpiral;
         
-        List<PointF> EarthRemaining;
-        List<PointF> FireRemaining;
-        List<PointF> WaterRemaining;
-        List<PointF> SaltRemaining;
-        List<PointF> VitaeRemaining;
-        List<PointF> MorsRemaining;
-        PointF LeadRemaining;
-        PointF TinRemaining;
-        PointF IronRemaining;
-        PointF CopperRemaining;
-        PointF SilverRemaining;
-        PointF GoldRemaining;
 
         public GameBoard()
         {
             InitializeComponent();
 
-            // select the area that will be used for the game
+            
 
             Hexagons = new List<PointF>();
             Marbles = new List<Marble>();
             DefineBoard();
-            AirRemaining = new List<PointF>();
-            FireRemaining = new List<PointF>();
-            WaterRemaining = new List<PointF>();
-            EarthRemaining = new List<PointF>();
-            SaltRemaining = new List<PointF>();
-            VitaeRemaining = new List<PointF>();
-            MorsRemaining = new List<PointF>();
 
-            for (int i = 12; i < 21; i++) {
-                AirRemaining.Add(new PointF(i, 1));
-                EarthRemaining.Add(new Point(i, 2));
-                FireRemaining.Add(new PointF(i, 3));
-                WaterRemaining.Add(new PointF(i, 4));
-            }
+            CCSpiral = new List<PointF>();
 
-            for (int i = 12; i < 17; i++)
-            {
-                SaltRemaining.Add(new PointF(i, 5));
-            }
-            for (int i = 12; i < 17; i++) { 
-                VitaeRemaining.Add(new PointF(i, 6));
+            CCSpiral.AddRange(GetSurroundingHexes(new PointF(5,5), 1));
+            
 
-                MorsRemaining.Add(new PointF(i + 6, 6));
-            }
-
-            LeadRemaining = new PointF(12, 7);
-            TinRemaining = new PointF(12, 8);
-            IronRemaining = new PointF(12, 9);
-            CopperRemaining = new PointF(12, 10);
-            SilverRemaining = new PointF(12, 11);
-            GoldRemaining = new PointF(12, 12);
         }
 
+        // TODO
+        // middle is the reference point, we want the hexes around the middle
+        // distance is the number of hexes between middle and the surrounding hexes, 1 would be the hexes touching the middle hex
+        private List<PointF> GetSurroundingHexes(PointF middle, int distance)
+        {
+            List<PointF> hexes = new List<PointF>();
+
+
+
+            return hexes;
+        }
+
+        // select the area that will be used for the game
         private void DefineBoard()
         {
             // top point
@@ -342,6 +320,55 @@ namespace ElementalGame
             // if not all the marbles are placed in the initial loop, assign the leftovers to random spaces on the board
             var unplaced = Marbles.Where(x => x.Placed() == false);
             
+            foreach (Marble m in unplaced)
+            {
+                while (true)
+                {
+                    randInt = rand.Next(Hexagons.Count - 1);
+                    if (GetMarble(Hexagons[randInt]) == null)
+                    {
+                        m.Location = Hexagons[randInt];
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        // TODO start on the inside of the game board
+        private void PlaceMarblesMiddleOut()
+        {
+            Random rand = new Random();
+            int randInt;
+
+            // for each hex in the play area, try to add a marble, if the random number is outside the bounds of the list, nothing is added (blank space)
+            foreach (PointF p in Hexagons)
+            {
+                // skip middle space, reserved for gold
+                if (p.X == 5 && p.Y == 5)
+                    continue;
+
+                while (true)
+                {
+                    randInt = rand.Next(Marbles.Count + 10);
+
+                    if (randInt >= Marbles.Count)
+                    {
+                        break; // blank space
+                    }
+                    if (!Marbles[randInt].Placed())
+                    {
+                        Marbles[randInt].Location = new PointF(p.X, p.Y);
+                        break;
+                    }
+                }
+
+
+            }
+
+            // if not all the marbles are placed in the initial loop, assign the leftovers to random spaces on the board
+            var unplaced = Marbles.Where(x => x.Placed() == false);
+
             foreach (Marble m in unplaced)
             {
                 while (true)
@@ -691,7 +718,7 @@ namespace ElementalGame
                     result = Brushes.LightGray;
                     break;
                 case MarbleType.Lead:
-                    result = Brushes.DarkBlue;
+                    result = new TextureBrush(Properties.Resources.Lead);
                     break;
                 case MarbleType.Tin:
                     result = Brushes.DarkGray;
@@ -719,6 +746,7 @@ namespace ElementalGame
             switch (type)
             {
                 case MarbleType.Air:
+                    
                     result = Brushes.WhiteSmoke;
                     break;
                 case MarbleType.Water:
@@ -743,7 +771,7 @@ namespace ElementalGame
                     result = Brushes.LightGray;
                     break;
                 case MarbleType.Lead:
-                    result = Brushes.DarkBlue;
+                    result = new TextureBrush(Properties.Resources.Lead);
                     break;
                 case MarbleType.Tin:
                     result = Brushes.DarkGray;
@@ -768,7 +796,7 @@ namespace ElementalGame
         private void picGrid_Paint(object sender, PaintEventArgs e)
         {
             string elementLabel;
-            PointF labelLocation;
+
             Marble m;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -779,23 +807,24 @@ namespace ElementalGame
                 e.Graphics.FillPolygon(b, HexToPoints(HexHeight, point.Y, point.X));
 
             }
-            // Add a label to each hexagon in play, if there is a marble there
-            foreach (PointF point in Hexagons)
+
+            // Add a label to marbles
+            if (Marbles.Count > 0)
             {
-                if (Marbles.Count > 0)
+                foreach (PointF point in Hexagons)
                 {
+
                     m = GetMarble(point);
                     if (m != null)
                     {
                         elementLabel = m.Element.ToString().Substring(0, 1);
-                        int row, col;
-                        labelLocation = HexToPoints(HexHeight, point.Y, point.X)[0];
-                        labelLocation.X += 15;
-                        labelLocation.Y -= 8;
+
                         e.Graphics.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(point));
+                        
                     }
                 }
             }
+        
             // The selected hex is white (For now)
             if (Selected.X >0 || Selected.Y > 0)
                 e.Graphics.FillPolygon(Brushes.White,
@@ -815,64 +844,36 @@ namespace ElementalGame
         
         }
 
+        
         private void DrawKey(Graphics gr)
         {
-            string elementLabel;
+            
+            DrawRemaining(gr, MarbleType.Air, 1);
+            DrawRemaining(gr, MarbleType.Earth, 2);
+            DrawRemaining(gr, MarbleType.Fire, 3);
+            DrawRemaining(gr, MarbleType.Water, 4);
+            DrawRemaining(gr, MarbleType.Salt, 5);
+            DrawRemaining(gr, MarbleType.Vitae, 6);
+            DrawRemaining(gr, MarbleType.Mors, 7);
 
-            foreach (PointF p in AirRemaining)
+            DrawRemaining(gr, MarbleType.Lead, 9);
+            DrawRemaining(gr, MarbleType.Tin, 9,14);
+            DrawRemaining(gr, MarbleType.Iron, 9, 16);
+            DrawRemaining(gr, MarbleType.Copper, 9, 18);
+            DrawRemaining(gr, MarbleType.Silver, 9, 20);
+            DrawRemaining(gr, MarbleType.Gold, 9, 22);
+            
+        }
+
+        private void DrawRemaining(Graphics gr, MarbleType type, int row, int col = 12)
+        {
+            var remaining = Marbles.Where(x => x.Element == type);
+            int i = 0;
+            foreach (Marble m in remaining)
             {
-                elementLabel = MarblesRemaining(MarbleType.Air).ToString();
-                gr.FillPolygon(Brushes.White, HexToPoints(HexHeight, p.Y, p.X));
-               // gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(AirRemaining));
+                gr.FillPolygon(GetBrush(type), HexToPoints(HexHeight, row, col + i));
+                i++;
             }
-
-            //elementLabel = MarblesRemaining(MarbleType.Earth).ToString(); ;
-            //gr.FillPolygon(Brushes.Brown, HexToPoints(HexHeight, EarthRemaining.Y, EarthRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(EarthRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Fire).ToString();
-            //gr.FillPolygon(Brushes.Red, HexToPoints(HexHeight, FireRemaining.Y, FireRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(FireRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Water).ToString();
-            //gr.FillPolygon(Brushes.Blue, HexToPoints(HexHeight, WaterRemaining.Y, WaterRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(WaterRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Salt).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Salt), HexToPoints(HexHeight, SaltRemaining.Y, SaltRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(SaltRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Vitae).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Vitae), HexToPoints(HexHeight, VitaeRemaining.Y, VitaeRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(VitaeRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Mors).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Mors), HexToPoints(HexHeight, MorsRemaining.Y, MorsRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(MorsRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Lead).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Lead), HexToPoints(HexHeight, LeadRemaining.Y, LeadRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(LeadRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Tin).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Tin), HexToPoints(HexHeight, TinRemaining.Y, TinRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(TinRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Iron).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Iron), HexToPoints(HexHeight, IronRemaining.Y, IronRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(IronRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Copper).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Copper), HexToPoints(HexHeight, CopperRemaining.Y, CopperRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(CopperRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Silver).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Silver), HexToPoints(HexHeight, SilverRemaining.Y, SilverRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(SilverRemaining));
-
-            //elementLabel = MarblesRemaining(MarbleType.Gold).ToString();
-            //gr.FillPolygon(GetBrush(MarbleType.Gold), HexToPoints(HexHeight, GoldRemaining.Y, GoldRemaining.X));
-            //gr.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(GoldRemaining));
         }
 
         private int MarblesRemaining(MarbleType type)
@@ -1042,6 +1043,7 @@ namespace ElementalGame
                 {
                     Selected.X = 0;
                     Selected.Y = 0;
+                    
                     Marbles.Remove(m);
                 }
                 else if (Selected.X == m.Location.X && Selected.Y == m.Location.Y) // clicked on the previously selected marble, deselect it
@@ -1055,7 +1057,9 @@ namespace ElementalGame
                     {
                         Ascend();
                     }
+                    
                     Marbles.Remove(GetMarble(Selected));
+                    
                     Marbles.Remove(m);
                     
                     Selected.X = 0;
@@ -1072,6 +1076,8 @@ namespace ElementalGame
             }
            
         }
+
+        
 
         // Sets the next Ascendency level based on the current level
         private void Ascend()
@@ -1128,6 +1134,7 @@ namespace ElementalGame
             CreateMarbles();    // create new marble objects
             PlaceMarbles();     // places the marbles around the board
             UnfreezeMarbles();  // unfreezes any free marbles
+            
             this.Refresh();     // redraw the board
         }
 

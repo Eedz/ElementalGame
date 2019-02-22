@@ -17,13 +17,53 @@ namespace Engine
         public MarbleType Element { get; set; }
         public List<MarbleType> Matchers { get; set; }
         public PointF Location { get; set; }
+        public string Symbol { get; set; }
 
         public Marble(MarbleState state, MarbleType element)
         {
             State = state;
             Element = element;
+            Symbol = SetSymbol();
             Matchers = new List<MarbleType>();
             GetMatchers();
+        }
+
+        public string SetSymbol()
+        {
+            switch (Element)
+            {
+                case MarbleType.Air:
+                    return "A";
+                    
+                case MarbleType.Water:
+                    return "W";
+                case MarbleType.Earth:
+                    return "E";
+                case MarbleType.Fire:
+                    return "F";
+                case MarbleType.Salt:
+                    return "Sa";
+                case MarbleType.Vitae:
+                    return "V";
+                case MarbleType.Mors:
+                    return "M";
+                case MarbleType.Quicksilver:
+                    return "QS";
+                case MarbleType.Lead:
+                    return "L";
+                case MarbleType.Tin:
+                    return "T";
+                case MarbleType.Iron:
+                    return "I";
+                case MarbleType.Copper:
+                    return "C";
+                case MarbleType.Silver:
+                    return "Si";
+                case MarbleType.Gold:
+                    return "G";
+                default:
+                    return "";
+            }
         }
 
         public void GetMatchers()

@@ -95,10 +95,49 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Lead.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\Tin.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Lead.png" />
+    <None Include="Resources\Iron.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Gold.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Copper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Silver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BoardSpace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Air.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Earth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Water.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Salt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Vitae.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AirSmall.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,18 +13,15 @@ using Engine;
 namespace ElementalGame
 {
     // TODO use better graphics for marbles, use TextureBrush for marbles
-    // TODO when selecting, try to highligh the border of the hex instead of turning it white
     // TODO add graphics to help screen
-    // TODO add new PlaceMarbles procedure that clusters more to the middle, or doesn't leave so many blanks in the middle
-
-    
     // TODO improve redrawing procedure, maybe not everything has to be redrawn every click?
     // TODO add streak counter, total wins counter, etc. and a way to reset them
+    // TODO it is possible that the game is unwinnable
     public partial class GameBoard : Form
     {
         List<PointF> Hexagons;              // the hexes involved in the game board
         List<Marble> Marbles { get; set; }  // all the marbles still in play, these are placed on the Hexagons
-
+        const int REMAINING_MARBLES_COLUMN = 12;
         int boardWidth = 11;
         int boardHeight = 11;
         int FormHeight = 506;
@@ -808,13 +805,68 @@ namespace ElementalGame
         }
 
 
-        private Brush GetBrush(PointF p)
+        private TextureBrush GetBrush(PointF p)
+        {
+            TextureBrush result = null;
+            Marble m = GetMarble((int)p.Y, (int)p.X);
+            if (m == null)
+                return new TextureBrush (Properties.Resources.BoardSpace);
+            
+
+            switch (m.Element)
+            {
+                case MarbleType.Air:
+                    result = new TextureBrush(Properties.Resources.Air);
+                    break;
+                case MarbleType.Water:
+                    result = new TextureBrush(Properties.Resources.Water);
+                    break;
+                case MarbleType.Earth:
+                    result = new TextureBrush(Properties.Resources.Earth);
+                    break;
+                case MarbleType.Fire:
+                    result = new TextureBrush(Properties.Resources.Fire);
+                    break;
+                case MarbleType.Salt:
+                    result = new TextureBrush(Properties.Resources.Salt);
+                    break;
+                case MarbleType.Vitae:
+                    result = new TextureBrush(Properties.Resources.Vitae);
+                    break;
+                case MarbleType.Mors:
+                    result = new TextureBrush(Properties.Resources.Mors);
+                    break;
+                case MarbleType.Quicksilver:
+                    result = new TextureBrush(Properties.Resources.BoardSpace);
+                    break;
+                case MarbleType.Lead:
+                    result = new TextureBrush(Properties.Resources.Lead);
+                    break;
+                case MarbleType.Tin:
+                    result = new TextureBrush(Properties.Resources.Tin);
+                    break;
+                case MarbleType.Iron:
+                    result = new TextureBrush(Properties.Resources.Iron);
+                    break;
+                case MarbleType.Copper:
+                    result = new TextureBrush(Properties.Resources.Copper);
+                    break;
+                case MarbleType.Silver:
+                    result = new TextureBrush(Properties.Resources.Silver);
+                    break;
+                case MarbleType.Gold:
+                    result = new TextureBrush(Properties.Resources.Gold);
+                    break;
+            }
+            return result;
+        }
+
+        private Brush GetSolidBrush(PointF p)
         {
             Brush result = null;
             Marble m = GetMarble((int)p.Y, (int)p.X);
             if (m == null)
                 return Brushes.Beige;
-            
 
             switch (m.Element)
             {
@@ -825,31 +877,31 @@ namespace ElementalGame
                     result = Brushes.Blue;
                     break;
                 case MarbleType.Earth:
-                    result = Brushes.Brown;
+                    result = Brushes.Green;
                     break;
                 case MarbleType.Fire:
                     result = Brushes.Red;
                     break;
                 case MarbleType.Salt:
-                    result = Brushes.Gray;
+                    result = Brushes.LightGray;
                     break;
                 case MarbleType.Vitae:
-                    result = Brushes.Pink;
+                    result = Brushes.LightPink;
                     break;
                 case MarbleType.Mors:
                     result = Brushes.Black;
                     break;
                 case MarbleType.Quicksilver:
-                    result = Brushes.LightGray;
+                    result = Brushes.LightSlateGray;
                     break;
                 case MarbleType.Lead:
-                    result = new TextureBrush(Properties.Resources.Lead);
+                    result = Brushes.SlateBlue;
                     break;
                 case MarbleType.Tin:
-                    result = Brushes.DarkGray;
+                    result = Brushes.Gray;
                     break;
                 case MarbleType.Iron:
-                    result = Brushes.DarkSlateBlue;
+                    result = Brushes.DarkBlue;
                     break;
                 case MarbleType.Copper:
                     result = Brushes.SandyBrown;
@@ -864,45 +916,96 @@ namespace ElementalGame
             return result;
         }
 
-        private Brush GetBrush(MarbleType type)
+        private TextureBrush GetBrush(MarbleType type)
         {
-            Brush result = null;
+            TextureBrush result = null;
             
             switch (type)
             {
                 case MarbleType.Air:
-                    
+                    result = new TextureBrush(Properties.Resources.Air);
+                    break;
+                case MarbleType.Water:
+                    result = new TextureBrush(Properties.Resources.Water);
+                    break;
+                case MarbleType.Earth:
+                    result = new TextureBrush(Properties.Resources.Earth);
+                    break;
+                case MarbleType.Fire:
+                    result = new TextureBrush(Properties.Resources.Fire);
+                    break;
+                case MarbleType.Salt:
+                    result = new TextureBrush(Properties.Resources.Salt);
+                    break;
+                case MarbleType.Vitae:
+                    result = new TextureBrush(Properties.Resources.Vitae);
+                    break;
+                case MarbleType.Mors:
+                    result = new TextureBrush(Properties.Resources.Mors);
+                    break;
+                case MarbleType.Quicksilver:
+                    result = new TextureBrush(Properties.Resources.BoardSpace);
+                    break;
+                case MarbleType.Lead:
+                    result = new TextureBrush(Properties.Resources.Lead);
+                    break;
+                case MarbleType.Tin:
+                    result = new TextureBrush(Properties.Resources.Tin);
+                    break;
+                case MarbleType.Iron:
+                    result = new TextureBrush(Properties.Resources.Iron);
+                    break;
+                case MarbleType.Copper:
+                    result = new TextureBrush(Properties.Resources.Copper);
+                    break;
+                case MarbleType.Silver:
+                    result = new TextureBrush(Properties.Resources.Silver);
+                    break;
+                case MarbleType.Gold:
+                    result = new TextureBrush(Properties.Resources.Gold);
+                    break;
+            }
+            return result;
+        }
+
+        private Brush GetSolidBrush(MarbleType type)
+        {
+            Brush result = null;
+
+            switch (type)
+            {
+                case MarbleType.Air:
                     result = Brushes.WhiteSmoke;
                     break;
                 case MarbleType.Water:
                     result = Brushes.Blue;
                     break;
                 case MarbleType.Earth:
-                    result = Brushes.Brown;
+                    result = Brushes.Green;
                     break;
                 case MarbleType.Fire:
                     result = Brushes.Red;
                     break;
                 case MarbleType.Salt:
-                    result = Brushes.Gray;
+                    result = Brushes.LightGray;
                     break;
                 case MarbleType.Vitae:
-                    result = Brushes.Pink;
+                    result = Brushes.LightPink;
                     break;
                 case MarbleType.Mors:
                     result = Brushes.Black;
                     break;
                 case MarbleType.Quicksilver:
-                    result = Brushes.LightGray;
+                    result = Brushes.LightSlateGray;
                     break;
                 case MarbleType.Lead:
-                    result = new TextureBrush(Properties.Resources.Lead);
+                    result = Brushes.SlateBlue;
                     break;
                 case MarbleType.Tin:
-                    result = Brushes.DarkGray;
+                    result = Brushes.Gray;
                     break;
                 case MarbleType.Iron:
-                    result = Brushes.DarkSlateBlue;
+                    result = Brushes.DarkBlue;
                     break;
                 case MarbleType.Copper:
                     result = Brushes.SandyBrown;
@@ -920,58 +1023,109 @@ namespace ElementalGame
         // Redraw the grid.
         private void picGrid_Paint(object sender, PaintEventArgs e)
         {
-            string elementLabel;
 
-            Marble m;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Draw the board hexagons
-            foreach (PointF point in Hexagons)
-            {
-                Brush b = GetBrush(point);
-                e.Graphics.FillPolygon(b, HexToPoints(HexHeight, point.Y, point.X));
-
-            }
-
-         
+            DrawBoard(e.Graphics);
 
             // Add a label to marbles
             if (Marbles.Count > 0)
             {
+                DrawMarbles(e.Graphics);
+                Marble m;
                 foreach (PointF point in Hexagons)
                 {
-
                     m = GetMarble(point);
                     if (m != null)
                     {
-                        elementLabel = m.Element.ToString().Substring(0, 1);
-
-                        e.Graphics.DrawString(elementLabel, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(point));
-                        
+                        e.Graphics.DrawString(m.Symbol, new Font("Tahoma", 10), Brushes.Goldenrod, LabelLocation(point));
                     }
                 }
             }
-        
-            // The selected hex is white (For now)
-            if (Selected.X >0 || Selected.Y > 0)
-                e.Graphics.FillPolygon(Brushes.White,
-                    HexToPoints(HexHeight, Selected.Y, Selected.X));
-
 
             DrawKey(e.Graphics);
 
             // Draw the grid.
-            Pen p = new Pen(Color.Black, 1);
-            p.Alignment = PenAlignment.Outset;
-           
             DrawHexGrid(e.Graphics, Pens.Black,
                 0,this.ClientSize.Width ,
                 100, this.ClientSize.Height,
                 HexHeight);
-        
+
+            // The selected hex is outlined in gold
+            if (Selected.X > 0 || Selected.Y > 0)
+            {
+                e.Graphics.DrawPolygon(new Pen(Brushes.Gold, 5),
+                    HexToPoints(HexHeight, Selected.Y, Selected.X));
+            }
         }
 
-        
+        // Draw the board hexagons and the marbles on each hexagon
+        private void DrawBoard(Graphics gr)
+        {
+            
+            foreach (PointF point in Hexagons)
+            {
+                //TextureBrush b = new TextureBrush(Properties.Resources.BoardSpace);
+                Brush b = Brushes.Beige;
+
+                gr.FillPolygon(b, HexToPoints(HexHeight, point.Y, point.X));
+               
+                //if (Marbles.Count > 0)
+                //    System.Threading.Thread.Sleep(10);
+            }
+        }
+
+        // Draw the board hexagons and the marbles on each hexagon
+        private void DrawBoardImages(Graphics gr)
+        {
+
+            foreach (PointF point in Hexagons)
+            {
+                TextureBrush b = new TextureBrush(Properties.Resources.BoardSpace);
+                
+
+                gr.FillPolygon(b, HexToPoints2(HexHeight, point.Y, point.X));
+
+                //if (Marbles.Count > 0)
+                //    System.Threading.Thread.Sleep(10);
+            }
+        }
+
+
+
+        // Draw the board hexagons and the marbles on each hexagon
+        private void DrawMarbles(Graphics gr)
+        {
+
+            foreach (Marble m in Marbles)
+            {
+                Brush b = GetSolidBrush(m.Location);
+
+                gr.FillPolygon(b, HexToPoints(HexHeight, m.Location.Y, m.Location.X));
+                //if (Marbles.Count > 0)
+                //    System.Threading.Thread.Sleep(10);
+            }
+        }
+
+        // Draw the board hexagons and the marbles on each hexagon
+        private void DrawMarbles2(Graphics gr)
+        {
+
+            foreach (Marble m in Marbles)
+            {
+                var b = GetBrush(m.Location);
+
+
+                //b.ScaleTransform(2,0);
+
+
+                gr.FillPolygon(b, HexToPoints2(HexHeight, m.Location.Y, m.Location.X));
+                //if (Marbles.Count > 0)
+                //    System.Threading.Thread.Sleep(10);
+            }
+        }
+
+        // Draw the remaining marbles in the game beside the board
         private void DrawKey(Graphics gr)
         {
             
@@ -992,13 +1146,13 @@ namespace ElementalGame
             
         }
 
-        private void DrawRemaining(Graphics gr, MarbleType type, int row, int col = 12)
+        private void DrawRemaining(Graphics gr, MarbleType type, int row, int col = REMAINING_MARBLES_COLUMN)
         {
             var remaining = Marbles.Where(x => x.Element == type);
             int i = 0;
             foreach (Marble m in remaining)
             {
-                gr.FillPolygon(GetBrush(type), HexToPoints(HexHeight, row, col + i));
+                gr.FillPolygon(GetSolidBrush(type), HexToPoints(HexHeight, row, col + i));
                 i++;
             }
         }
@@ -1076,6 +1230,34 @@ namespace ElementalGame
                     new PointF(x + width, y),
                     new PointF(x + width * 0.75f, y + height / 2),
                     new PointF(x + width * 0.25f, y + height / 2),
+                };
+        }
+
+        // Return the points that define the indicated hexagon.
+        private PointF[] HexToPoints2(float height, float row, float col)
+        {
+            // Start with the leftmost corner of the upper left hexagon.
+            float width = HexWidth(height);
+            float y = height / 2;
+            float x = 0;
+
+            // Move down the required number of rows.
+            y += row * height;
+
+            // If the column is odd, move down half a hex more.
+            if (col % 2 == 1) y += height / 2;
+
+            // Move over for the column number.
+            x += col * (width * 0.75f);
+
+            // Generate the points.
+            return new PointF[]
+                {
+                    new PointF(x + width * 0.125f , y- height /4),
+                    new PointF(x + width * 0.875f , y - height / 4),
+                    new PointF(x + width * 0.875f , y + height / 4),
+                    new PointF(x + width *0.125f, y+ height / 4)
+                   
                 };
         }
 
@@ -1262,8 +1444,10 @@ namespace ElementalGame
             Hexagons = CCSpiral;
             PlaceMarblesMiddleOut(Hexagons);     // places the marbles around the board
             UnfreezeMarbles();  // unfreezes any free marbles
+
             
             this.Refresh();     // redraw the board
+            
         }
 
         private void dataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)

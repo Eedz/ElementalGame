@@ -50,8 +50,11 @@ namespace ElementalGame
             DefineBoard();
 
             CCSpiral = new List<PointF>();
-
-            CCSpiral.AddRange(GetSurroundingHexes(new PointF(5,5), 1));
+            CCSpiral.Add(new PointF(5, 5));
+            for (int i = 1; i <= 5; i++)
+            {
+                CCSpiral.AddRange(GetSurroundingHexes(new PointF(5, 5), i));
+            }
             
 
         }
@@ -62,10 +65,135 @@ namespace ElementalGame
         private List<PointF> GetSurroundingHexes(PointF middle, int distance)
         {
             List<PointF> hexes = new List<PointF>();
+            const int TopLeftEven = -1;
+            
+            // top
+            PointF t = new PointF(middle.X, middle.Y);
+            for (int i = 0; i < distance; i++)
+            {
+                t = GetTopXY(t);
+            }
+            hexes.Add(t);
+
+            PointF tl = new PointF(middle.X, middle.Y);
+            for (int i = 0; i < distance; i++)
+            {
+                tl = GetTopLeftXY(tl);
+            }
+            hexes.Add(tl);
+
+            PointF bl = new PointF(middle.X, middle.Y);
+            for (int i = 0; i < distance; i++)
+            {
+                bl = GetBottomLeftXY(bl);
+            }
+            hexes.Add(bl);
 
 
+            PointF b = new PointF(middle.X, middle.Y);
+            for (int i = 0; i < distance; i++)
+            {
+                b = GetBottomXY(b);
+            }
+            hexes.Add(b);
+
+
+            PointF br = new PointF(middle.X, middle.Y);
+            for (int i = 0; i < distance; i++)
+            {
+                br = GetBottomRightXY(br);
+            }
+            hexes.Add(br);
+
+            PointF tr = new PointF(middle.X, middle.Y);
+            for (int i = 0; i < distance; i++)
+            {
+                tr = GetTopRightXY(tr);
+            }
+            hexes.Add(tr);
+
+            if (distance == 1)
+                return hexes;
+
+            for (int i = 0; i < distance-1; i++)
+            {
+                t = GetBottomLeftXY(t);
+                hexes.Add(t);
+            }
+
+            for (int i = 0; i < distance-1; i++)
+            {
+                tl = GetBottomXY(tl);
+                hexes.Add(tl);
+            }
+
+            for (int i = 0; i < distance-1; i++)
+            {
+                bl = GetBottomRightXY(bl);
+                hexes.Add(bl);
+            }
+
+            for (int i = 0; i < distance-1; i++)
+            {
+                b = GetTopRightXY(b);
+                hexes.Add(b);
+            }
+
+            for (int i = 0; i < distance-1; i++)
+            {
+                br = GetTopXY(br);
+                hexes.Add(br);
+            }
+
+            for (int i = 0; i < distance-1; i++)
+            {
+                tr = GetTopLeftXY(tr);
+                hexes.Add(tr);
+            }
 
             return hexes;
+        }
+
+        public PointF GetTopXY(PointF refer)
+        {
+            return new PointF(refer.X, refer.Y - 1);
+        }
+
+        public PointF GetBottomXY(PointF refer)
+        {
+            return new PointF(refer.X, refer.Y + 1);
+        }
+
+        public PointF GetTopRightXY(PointF refer)
+        {
+            if (refer.X % 2 == 0)
+                return new PointF(refer.X + 1, refer.Y - 1);
+            else
+                return new PointF(refer.X + 1, refer.Y);
+        }
+
+        public PointF GetTopLeftXY(PointF refer)
+        {
+            if (refer.X % 2 == 0)
+                return new PointF(refer.X - 1, refer.Y - 1);
+            else
+                return new PointF(refer.X - 1, refer.Y);
+        }
+
+        public PointF GetBottomRightXY(PointF refer)
+        {
+            if (refer.X % 2 == 0)
+                return new PointF(refer.X + 1, refer.Y);
+            else
+                return new PointF(refer.X + 1, refer.Y + 1);
+        }
+
+        public PointF GetBottomLeftXY(PointF refer)
+        {
+            if (refer.X % 2 == 0)
+                return new PointF(refer.X - 1, refer.Y);
+            else
+                return new PointF(refer.X - 1, refer.Y + 1);
         }
 
         // select the area that will be used for the game
@@ -336,18 +464,15 @@ namespace ElementalGame
         }
 
         // TODO start on the inside of the game board
-        private void PlaceMarblesMiddleOut()
+        private void PlaceMarblesMiddleOut(List<PointF> boardSpaces)
         {
             Random rand = new Random();
             int randInt;
 
             // for each hex in the play area, try to add a marble, if the random number is outside the bounds of the list, nothing is added (blank space)
-            foreach (PointF p in Hexagons)
+            foreach (PointF p in boardSpaces)
             {
-                // skip middle space, reserved for gold
-                if (p.X == 5 && p.Y == 5)
-                    continue;
-
+                if (p.X == 5 && p.Y == 5) { continue; }
                 while (true)
                 {
                     randInt = rand.Next(Marbles.Count + 10);
@@ -373,10 +498,10 @@ namespace ElementalGame
             {
                 while (true)
                 {
-                    randInt = rand.Next(Hexagons.Count - 1);
-                    if (GetMarble(Hexagons[randInt]) == null)
+                    randInt = rand.Next(boardSpaces.Count - 1);
+                    if (GetMarble(boardSpaces[randInt]) == null)
                     {
-                        m.Location = Hexagons[randInt];
+                        m.Location = boardSpaces[randInt];
                         break;
                     }
                 }
@@ -808,6 +933,8 @@ namespace ElementalGame
 
             }
 
+         
+
             // Add a label to marbles
             if (Marbles.Count > 0)
             {
@@ -1132,7 +1259,8 @@ namespace ElementalGame
             Ascendency = MarbleType.Lead; // sets ascendency level
             Marbles.Clear();    // clears marble objects
             CreateMarbles();    // create new marble objects
-            PlaceMarbles();     // places the marbles around the board
+            Hexagons = CCSpiral;
+            PlaceMarblesMiddleOut(Hexagons);     // places the marbles around the board
             UnfreezeMarbles();  // unfreezes any free marbles
             
             this.Refresh();     // redraw the board
